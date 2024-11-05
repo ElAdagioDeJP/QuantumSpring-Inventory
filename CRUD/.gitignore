@@ -1,0 +1,55 @@
+# Directorios de compilación
+target/
+build/
+
+# Archivos de configuración de Maven
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Archivos de configuración de STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Archivos de configuración de IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Archivos de configuración de NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Archivos de configuración de VS Code
+.vscode/
+
+# Archivos de configuración de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
+
+# Archivos de configuración de entorno
+.env
+
+# Archivos de salida de pruebas
+test-output/
+
+# Archivos de configuración de cobertura de código
+coverage/
+
+# Archivos de configuración de Docker
+docker-compose.override.yml
+
+# Dependencias de Maven
+**/target/
