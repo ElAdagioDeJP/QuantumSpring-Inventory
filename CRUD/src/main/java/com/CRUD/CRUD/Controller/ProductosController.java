@@ -8,6 +8,7 @@ package com.CRUD.CRUD.Controller;
  *
  * @author jearm
  */
+
 import com.CRUD.CRUD.Excepciones.ResourceNotFoundException;
 import com.CRUD.CRUD.model.Productos;
 import com.CRUD.CRUD.Servicios.ProductosServices;
@@ -26,13 +27,11 @@ public class ProductosController {
     @Autowired
     private ProductosServices productosServices;
 
-    // Obtener todos los productos
     @GetMapping
     public List<Productos> obtenerTodosLosProductos() {
         return productosServices.obtenerTodosLosProductos();
     }
 
-    // Obtener un producto por ID
     @GetMapping("/{id}")
     public ResponseEntity<Productos> obtenerProductoPorId(@PathVariable Long id) {
         Productos producto = productosServices.obtenerProductoPorId(id)
@@ -40,28 +39,49 @@ public class ProductosController {
         return ResponseEntity.ok().body(producto);
     }
 
-    // Crear un nuevo producto
     @PostMapping
     public Productos crearProducto(@RequestBody Productos producto) {
         return productosServices.crearProducto(producto);
     }
 
-    // Actualizar un producto existente
     @PutMapping("/{id}")
     public ResponseEntity<Productos> actualizarProducto(@PathVariable Long id, @RequestBody Productos detallesProducto) {
-        Productos productoActualizado = productosServices.actualizarProducto(id, detallesProducto);
+        Productos producto = productosServices.obtenerProductoPorId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado para este id :: " + id));
+
+        producto.setTitulo(detallesProducto.getTitulo());
+        producto.setCategoria(detallesProducto.getCategoria());
+        producto.setPrecio(detallesProducto.getPrecio());
+        producto.setPorcentajeDescuento(detallesProducto.getPorcentajeDescuento());
+        producto.setCalificacion(detallesProducto.getCalificacion());
+        producto.setStock(detallesProducto.getStock());
+        producto.setMarca(detallesProducto.getMarca());
+        producto.setSku(detallesProducto.getSku());
+        producto.setPeso(detallesProducto.getPeso());
+        producto.setInformacionGarantia(detallesProducto.getInformacionGarantia());
+        producto.setInformacionEnvio(detallesProducto.getInformacionEnvio());
+        producto.setEstadoDisponibilidad(detallesProducto.getEstadoDisponibilidad());
+        producto.setPoliticaDevolucion(detallesProducto.getPoliticaDevolucion());
+        producto.setCantidadMinimaPedido(detallesProducto.getCantidadMinimaPedido());
+        producto.setMiniatura(detallesProducto.getMiniatura());
+        producto.setTags(detallesProducto.getTags());
+        producto.setImagenes(detallesProducto.getImagenes());
+        producto.setDimensiones(detallesProducto.getDimensiones());
+        producto.setMeta(detallesProducto.getMeta());
+        
+
+        final Productos productoActualizado = productosServices.actualizarProducto(producto);
         return ResponseEntity.ok(productoActualizado);
     }
 
-    // Eliminar un producto
     @DeleteMapping("/{id}")
     public Map<String, Boolean> eliminarProducto(@PathVariable Long id) {
-        productosServices.eliminarProducto(id);
+        Productos producto = productosServices.obtenerProductoPorId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado para este id :: " + id));
+
+        productosServices.eliminarProducto(producto);
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("eliminado", Boolean.TRUE);
         return respuesta;
     }
-
-    // Redirigir a index.html para servir la aplicación Vue.js
-   
 }

@@ -4,20 +4,15 @@
  */
 package com.CRUD.CRUD.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.util.List;
+import java.time.LocalDateTime;
 
-/**
- *
- * @author jearm
- */
 @Entity
 public class Productos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    private Long id;
     private String titulo;
     private String descripcion;
     private String categoria;
@@ -28,19 +23,30 @@ public class Productos {
     private String marca;
     private String sku;
     private Double peso;
-    private String dimensiones;
     private String informacionGarantia;
     private String informacionEnvio;
     private String estadoDisponibilidad;
     private String politicaDevolucion;
     private Integer cantidadMinimaPedido;
-    private String codigoBarras;
-    private String codigoQR;
     private String miniatura;
-    private String imagenes;
+
+    @ElementCollection
+    private List<String> tags;
+
+    @ElementCollection
+    private List<String> imagenes;
+
+    @Embedded
+    private Dimensions dimensiones;
+
+    @Embedded
+    private Meta meta;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "product_id")
+    private List<Review> reviews;
 
     // Getters y Setters
-
     public Long getId() {
         return id;
     }
@@ -129,14 +135,6 @@ public class Productos {
         this.peso = peso;
     }
 
-    public String getDimensiones() {
-        return dimensiones;
-    }
-
-    public void setDimensiones(String dimensiones) {
-        this.dimensiones = dimensiones;
-    }
-
     public String getInformacionGarantia() {
         return informacionGarantia;
     }
@@ -177,22 +175,6 @@ public class Productos {
         this.cantidadMinimaPedido = cantidadMinimaPedido;
     }
 
-    public String getCodigoBarras() {
-        return codigoBarras;
-    }
-
-    public void setCodigoBarras(String codigoBarras) {
-        this.codigoBarras = codigoBarras;
-    }
-
-    public String getCodigoQR() {
-        return codigoQR;
-    }
-
-    public void setCodigoQR(String codigoQR) {
-        this.codigoQR = codigoQR;
-    }
-
     public String getMiniatura() {
         return miniatura;
     }
@@ -201,12 +183,43 @@ public class Productos {
         this.miniatura = miniatura;
     }
 
-    public String getImagenes() {
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public List<String> getImagenes() {
         return imagenes;
     }
 
-    public void setImagenes(String imagenes) {
+    public void setImagenes(List<String> imagenes) {
         this.imagenes = imagenes;
     }
-    
+
+    public Dimensions getDimensiones() {
+        return dimensiones;
+    }
+
+    public void setDimensiones(Dimensions dimensiones) {
+        this.dimensiones = dimensiones;
+    }
+
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }
