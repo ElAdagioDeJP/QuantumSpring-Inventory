@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.CRUD.CRUD.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Productos {
@@ -17,8 +13,7 @@ public class Productos {
     private String descripcion;
     private String categoria;
     private Double precio;
-    private Double porcentajeDescuento;
-    private Double calificacion;
+    private Double descuento;
     private Integer stock;
     private String marca;
     private String sku;
@@ -29,6 +24,10 @@ public class Productos {
     private String politicaDevolucion;
     private Integer cantidadMinimaPedido;
     private String miniatura;
+    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechaActualizacion;
+    private String barcode;
+    private String qrcode;
 
     @ElementCollection
     private List<String> tags;
@@ -87,20 +86,12 @@ public class Productos {
         this.precio = precio;
     }
 
-    public Double getPorcentajeDescuento() {
-        return porcentajeDescuento;
+    public Double getDescuento() {
+        return descuento;
     }
 
-    public void setPorcentajeDescuento(Double porcentajeDescuento) {
-        this.porcentajeDescuento = porcentajeDescuento;
-    }
-
-    public Double getCalificacion() {
-        return calificacion;
-    }
-
-    public void setCalificacion(Double calificacion) {
-        this.calificacion = calificacion;
+    public void setDescuento(Double descuento) {
+        this.descuento = descuento;
     }
 
     public Integer getStock() {
@@ -181,6 +172,38 @@ public class Productos {
 
     public void setMiniatura(String miniatura) {
         this.miniatura = miniatura;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public LocalDateTime getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getQrcode() {
+        return qrcode;
+    }
+
+    public void setQrcode(String qrcode) {
+        this.qrcode = qrcode;
     }
 
     public List<String> getTags() {

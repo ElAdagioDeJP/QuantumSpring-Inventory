@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.CRUD.CRUD.Controller;
-
-/**
- *
- * @author jearm
- */
 
 import com.CRUD.CRUD.Excepciones.ResourceNotFoundException;
 import com.CRUD.CRUD.model.Productos;
@@ -16,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +33,8 @@ public class ProductosController {
 
     @PostMapping
     public Productos crearProducto(@RequestBody Productos producto) {
+        producto.setFechaCreacion(LocalDateTime.now());
+        producto.setFechaActualizacion(LocalDateTime.now());
         return productosServices.crearProducto(producto);
     }
 
@@ -50,10 +44,10 @@ public class ProductosController {
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado para este id :: " + id));
 
         producto.setTitulo(detallesProducto.getTitulo());
+        producto.setDescripcion(detallesProducto.getDescripcion());
         producto.setCategoria(detallesProducto.getCategoria());
         producto.setPrecio(detallesProducto.getPrecio());
-        producto.setPorcentajeDescuento(detallesProducto.getPorcentajeDescuento());
-        producto.setCalificacion(detallesProducto.getCalificacion());
+        producto.setDescuento(detallesProducto.getDescuento());
         producto.setStock(detallesProducto.getStock());
         producto.setMarca(detallesProducto.getMarca());
         producto.setSku(detallesProducto.getSku());
@@ -68,7 +62,9 @@ public class ProductosController {
         producto.setImagenes(detallesProducto.getImagenes());
         producto.setDimensiones(detallesProducto.getDimensiones());
         producto.setMeta(detallesProducto.getMeta());
-        
+        producto.setBarcode(detallesProducto.getBarcode());
+        producto.setQrcode(detallesProducto.getQrcode());
+        producto.setFechaActualizacion(LocalDateTime.now());
 
         final Productos productoActualizado = productosServices.actualizarProducto(producto);
         return ResponseEntity.ok(productoActualizado);

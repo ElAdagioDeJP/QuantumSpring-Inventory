@@ -4,10 +4,6 @@
  */
 package com.CRUD.CRUD.Servicios;
 
-/**
- *
- * @author jearm
- */
 import com.CRUD.CRUD.model.Productos;
 import com.CRUD.CRUD.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

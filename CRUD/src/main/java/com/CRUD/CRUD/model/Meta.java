@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 public class Meta {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String barcode;
-    private String qrCode;
+
 
     // Getters y Setters
     public LocalDateTime getCreatedAt() {
@@ -35,19 +34,5 @@ public class Meta {
         this.updatedAt = updatedAt;
     }
 
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
-
-    public String getQrCode() {
-        return qrCode;
-    }
-
-    public void setQrCode(String qrCode) {
-        this.qrCode = qrCode;
-    }
+   
 }
