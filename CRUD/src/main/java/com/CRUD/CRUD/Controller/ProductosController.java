@@ -6,7 +6,6 @@ import com.CRUD.CRUD.Servicios.ProductosServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -59,13 +58,17 @@ public class ProductosController {
         producto.setCantidadMinimaPedido(detallesProducto.getCantidadMinimaPedido());
         producto.setMiniatura(detallesProducto.getMiniatura());
         producto.setTags(detallesProducto.getTags());
-        producto.setImagenes(detallesProducto.getImagenes());
-        producto.setDimensiones(detallesProducto.getDimensiones());
-        producto.setMeta(detallesProducto.getMeta());
+        producto.setImagen(detallesProducto.getImagen());
+       
         producto.setBarcode(detallesProducto.getBarcode());
         producto.setQrcode(detallesProducto.getQrcode());
         producto.setFechaActualizacion(LocalDateTime.now());
+        producto.setWidth(detallesProducto.getWidth());
+        producto.setHeight(detallesProducto.getHeight());
+        producto.setDepth(detallesProducto.getDepth());
 
+
+        
         final Productos productoActualizado = productosServices.actualizarProducto(producto);
         return ResponseEntity.ok(productoActualizado);
     }

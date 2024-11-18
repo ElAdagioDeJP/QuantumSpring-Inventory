@@ -50,6 +50,9 @@
         <label for="stock">Stock:</label>
         <input type="number" v-model="productoForm.stock" required>
 
+        <label for="estadoDisponibilidad">Estado de Disponibilidad:</label>
+        <input type="text" v-model="productoForm.estadoDisponibilidad" id="estadoDisponibilidad" readonly />
+
         <label for="marca">Marca:</label>
         <input type="text" v-model="productoForm.marca" required>
 
@@ -59,17 +62,29 @@
         <label for="peso">Peso:</label>
         <input type="number" v-model="productoForm.peso" required>
 
+        <label for="width">Ancho:</label>
+        <input type="number" v-model="productoForm.width" required/>
+    
+        <label for="height">Alto:</label>
+      | <input type="number" v-model="productoForm.height"  required/>
+    
+        <label for="depth">Profundidad:</label>
+        <input type="number" v-model="productoForm.depth" required/>
+
         <label for="informacionGarantia">Información de Garantía:</label>
         <input type="number" v-model="productoForm.informacionGarantia" required>
 
-        <label for="shippingInformation">Información de Envío:</label>
-        <input type="number" v-model="productoForm.shippingInformation" required>
+        <label for="informacionEnvio">Información de Envío:</label>
+        <input type="number" v-model="productoForm.informacionEnvio" required>
 
-        <label for="politicaRetorno">Política de Retorno:</label>
-        <input type="number" v-model="productoForm.politicaRetorno" required>
+        <label for="politicaDevolucion">Política de Retorno:</label>
+        <input type="number" v-model="productoForm.politicaDevolucion" required>
 
         <label for="cantidadMinimaPedido">Cantidad Mínima de Pedido:</label>
         <input type="number" v-model="productoForm.cantidadMinimaPedido" required>
+
+        <label for="imagen"> Imagen:</label>
+        <input type="text" v-model="productoForm.imagen"  />
 
         <label for="tags">Tags:</label>
         <input type="text" v-model="nuevoTag">
@@ -79,7 +94,7 @@
             {{ tag }} <button type="button" @click="eliminarTag(index)">x</button>
           </li>
         </ul>
-
+        
         <button type="submit">{{ editando ? 'Actualizar' : 'Crear' }}</button>
         <button type="button" @click="cancelarFormulario">Cancelar</button>
       </form>
@@ -89,10 +104,9 @@
         <svg id="barcode"></svg>
       </div>
 
-      <div v-if="productoForm.qrcode">
-        <h3>Código QR</h3>
-        <div id="qrcode"></div>
-      </div>
+      
+      
+     
     </div>
 
     <!-- Modal para mostrar detalles del producto -->
@@ -100,31 +114,39 @@
       <div class="modal-content">
         <span class="close" @click="cerrarDetalles">&times;</span>
         <h2>Detalles del Producto</h2>
+        <p><strong>Id:</strong> {{ productoDetalles.id }}</p>
         <p><strong>Título:</strong> {{ productoDetalles.titulo }}</p>
         <p><strong>Descripción:</strong> {{ productoDetalles.descripcion }}</p>
         <p><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
         <p><strong>Precio:</strong> {{ productoDetalles.precio }}</p>
         <p><strong>Descuento:</strong> {{ productoDetalles.descuento }}%</p>
         <p><strong>Stock:</strong> {{ productoDetalles.stock }}</p>
+        <p><strong>Estado Disponibilidad:</strong> {{ productoDetalles.estadoDisponibilidad }}</p>
         <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
         <p><strong>SKU:</strong> {{ productoDetalles.sku }}</p>
         <p><strong>Peso:</strong> {{ productoDetalles.peso }}</p>
         <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }}</p>
-        <p><strong>Información de Envío:</strong> {{ productoDetalles.shippingInformation }}</p>
-        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaRetorno }}</p>
+        <p><strong>Información de Envío:</strong> {{ productoDetalles.informacionEnvio }}</p>
+        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }}</p>
         <p><strong>Cantidad Mínima de Pedido:</strong> {{ productoDetalles.cantidadMinimaPedido }}</p>
         <p><strong>Tags:</strong> {{ productoDetalles.tags.join(', ') }}</p>
+        <p><strong>Ancho:</strong> {{ productoDetalles.width }}</p>
+        <p><strong>Alto:</strong> {{ productoDetalles.height }}</p>
+        <p><strong>Profundidad:</strong> {{ productoDetalles.depth }}</p>
+        <div v-if="productoDetalles.imagen">
+          <p><strong>Imagen(Url):</strong></p>
+          <img :src="productoDetalles.imagen" alt="Imagen del Producto" />
+        </div>
         <div v-if="productoDetalles.barcode">
           <h3>Código de Barras</h3>
           <svg id="detalleBarcode"></svg>
         </div>
-        <div v-if="productoDetalles.qrcode">
-          <h3>Código QR</h3>
-          <div id="detalleQrcode"></div>
-        </div>
+       
       </div>
     </div>
 
+
+    
     <!-- Formulario para Crear Categoría -->
     <div v-if="mostrarFormularioCategoria">
       <h2>Crear Categoría</h2>
@@ -133,16 +155,17 @@
         <input type="text" v-model="nuevaCategoria" required>
         <button type="submit">Crear</button>
       </form>
+      
     </div>
+    
   </div>
 </template>
 
-<script>
+<script >
 import axios from 'axios';
 import $ from 'jquery';
 import 'datatables.net';
 import JsBarcode from 'jsbarcode';
-import QRCode from 'qrcode';
 
 export default {
   data() {
@@ -165,19 +188,33 @@ export default {
         sku: '',
         peso: 0,
         informacionGarantia: 0,
-        shippingInformation: 0,
-        politicaRetorno: 0,
+        informacionEnvio: 0,
+        politicaDevolucion: 0,
         cantidadMinimaPedido: 0,
         tags: [],
         fechaCreacion: '',
         fechaActualizacion: '',
         barcode: '',
-        qrcode: ''
+        qrcode: '',
+        width:null,
+        height:null,
+        depth:null,
+        estadoDisponibilidad: '',
+        imagen: '',
+        
+        
+        
       },
       productoDetalles: {},
       nuevaCategoria: '',
-      nuevoTag: ''
+      nuevoTag: '',
+      
     };
+  },
+  watch: {
+    'productoForm.stock': function(newStock) {
+      this.productoForm.estadoDisponibilidad = newStock < 5 ? 'Bajo Stock' : 'En Stock';
+    }
   },
   created() {
     this.obtenerProductos();
@@ -211,9 +248,7 @@ export default {
         if (this.productoForm.barcode) {
           this.generarCodigoBarras();
         }
-        if (this.productoForm.qrcode) {
-          this.generarCodigoQR();
-        }
+       
       });
     },
     cancelarFormulario() {
@@ -221,7 +256,7 @@ export default {
     },
     crearProducto() {
       this.productoForm.barcode = this.generarCodigoBarrasUnico();
-      this.productoForm.qrcode = this.generarCodigoQRUnico();
+    
       axios.post('http://localhost:8081/productos', this.productoForm)
         .then(() => {
           this.obtenerProductos();
@@ -283,14 +318,18 @@ export default {
         sku: '',
         peso: 0,
         informacionGarantia: 0,
-        shippingInformation: 0,
+        informacionEnvio: 0,
         politicaRetorno: 0,
         cantidadMinimaPedido: 0,
         tags: [],
         fechaCreacion: '',
         fechaActualizacion: '',
         barcode: '',
-        qrcode: ''
+        qrcode: '',
+        width:null, 
+        height:null,
+        depth:null,
+        imagen: '',
       };
     },
     generarCodigoBarras() {
@@ -301,19 +340,11 @@ export default {
         });
       }
     },
-    generarCodigoQR() {
-      if (this.productoForm.qrcode) {
-        QRCode.toCanvas(document.getElementById('qrcode'), this.productoForm.qrcode, function (error) {
-          if (error) console.error(error);
-        });
-      }
-    },
+    
     generarCodigoBarrasUnico() {
       return Math.floor(1000000000000 + Math.random() * 9000000000000).toString();
     },
-    generarCodigoQRUnico() {
-      return `https://example.com/qr/${Math.floor(1000000000000 + Math.random() * 9000000000000)}`;
-    },
+    
     mostrarDetallesProducto(producto) {
       this.productoDetalles = { ...producto };
       this.mostrarDetalles = true;
@@ -324,11 +355,7 @@ export default {
             displayValue: true
           });
         }
-        if (this.productoDetalles.qrcode) {
-          QRCode.toCanvas(document.getElementById('detalleQrcode'), this.productoDetalles.qrcode, function (error) {
-            if (error) console.error(error);
-          });
-        }
+       
       });
     },
     cerrarDetalles() {

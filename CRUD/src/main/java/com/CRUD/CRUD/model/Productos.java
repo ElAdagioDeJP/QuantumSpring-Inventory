@@ -24,22 +24,23 @@ public class Productos {
     private String politicaDevolucion;
     private Integer cantidadMinimaPedido;
     private String miniatura;
+    private String imagen;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
     private String barcode;
     private String qrcode;
-
+    private Double width;
+    private Double height;
+    private Double depth;
+    
     @ElementCollection
     private List<String> tags;
 
-    @ElementCollection
-    private List<String> imagenes;
 
-    @Embedded
-    private Dimensions dimensiones;
 
-    @Embedded
-    private Meta meta;
+    
+
+   
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "product_id")
@@ -49,7 +50,7 @@ public class Productos {
     public Long getId() {
         return id;
     }
-
+        
     public void setId(Long id) {
         this.id = id;
     }
@@ -62,6 +63,40 @@ public class Productos {
         this.titulo = titulo;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+    
+    
+
+    public Double getWidth() {
+        return width;
+    }
+
+    public void setWidth(Double width) {
+        this.width = width;
+    }
+
+    public Double getHeight() {
+        return height;
+    }
+
+    public void setHeight(Double height) {
+        this.height = height;
+    }
+
+    public Double getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Double depth) {
+        this.depth = depth;
+    }
+    
     public String getDescripcion() {
         return descripcion;
     }
@@ -214,29 +249,11 @@ public class Productos {
         this.tags = tags;
     }
 
-    public List<String> getImagenes() {
-        return imagenes;
-    }
+  
 
-    public void setImagenes(List<String> imagenes) {
-        this.imagenes = imagenes;
-    }
+    
 
-    public Dimensions getDimensiones() {
-        return dimensiones;
-    }
-
-    public void setDimensiones(Dimensions dimensiones) {
-        this.dimensiones = dimensiones;
-    }
-
-    public Meta getMeta() {
-        return meta;
-    }
-
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
+    
 
     public List<Review> getReviews() {
         return reviews;
