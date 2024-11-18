@@ -59,7 +59,6 @@ public class ProductosController {
         producto.setMiniatura(detallesProducto.getMiniatura());
         producto.setTags(detallesProducto.getTags());
         producto.setImagen(detallesProducto.getImagen());
-       
         producto.setBarcode(detallesProducto.getBarcode());
         producto.setQrcode(detallesProducto.getQrcode());
         producto.setFechaActualizacion(LocalDateTime.now());

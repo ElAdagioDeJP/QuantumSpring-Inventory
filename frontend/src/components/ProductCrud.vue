@@ -29,6 +29,7 @@
     <div v-if="mostrarFormulario">
       <h2>{{ editando ? 'Editar Producto' : 'Crear Producto' }}</h2>
       <form @submit.prevent="editando ? actualizarProducto() : crearProducto()">
+        <!-- Campos del formulario -->
         <label for="titulo">Título:</label>
         <input type="text" v-model="productoForm.titulo" required>
 
@@ -66,7 +67,7 @@
         <input type="number" v-model="productoForm.width" required/>
     
         <label for="height">Alto:</label>
-      | <input type="number" v-model="productoForm.height"  required/>
+        <input type="number" v-model="productoForm.height" required/>
     
         <label for="depth">Profundidad:</label>
         <input type="number" v-model="productoForm.depth" required/>
@@ -103,10 +104,6 @@
         <h3>Código de Barras</h3>
         <svg id="barcode"></svg>
       </div>
-
-      
-      
-     
     </div>
 
     <!-- Modal para mostrar detalles del producto -->
@@ -141,12 +138,9 @@
           <h3>Código de Barras</h3>
           <svg id="detalleBarcode"></svg>
         </div>
-       
       </div>
     </div>
 
-
-    
     <!-- Formulario para Crear Categoría -->
     <div v-if="mostrarFormularioCategoria">
       <h2>Crear Categoría</h2>
@@ -155,13 +149,11 @@
         <input type="text" v-model="nuevaCategoria" required>
         <button type="submit">Crear</button>
       </form>
-      
     </div>
-    
   </div>
 </template>
 
-<script >
+<script>
 import axios from 'axios';
 import $ from 'jquery';
 import 'datatables.net';
@@ -196,19 +188,15 @@ export default {
         fechaActualizacion: '',
         barcode: '',
         qrcode: '',
-        width:null,
-        height:null,
-        depth:null,
+        width: null,
+        height: null,
+        depth: null,
         estadoDisponibilidad: '',
         imagen: '',
-        
-        
-        
       },
       productoDetalles: {},
       nuevaCategoria: '',
       nuevoTag: '',
-      
     };
   },
   watch: {
@@ -221,14 +209,25 @@ export default {
   },
   methods: {
     obtenerProductos() {
-      axios.get('http://localhost:8081/productos')
+      axios.get('http://localhost:8082/productos')
         .then(response => {
           if ($.fn.dataTable.isDataTable('#productosTable')) {
             $('#productosTable').DataTable().destroy();
           }
           this.productos = response.data;
+          //definimos el datatable importante para que funcione
           this.$nextTick(function() {
-            $('#productosTable').DataTable();
+            $('#productosTable').DataTable({
+              paging: true,
+              searching: true,
+              ordering: true,
+              info: true,
+              lengthChange: true,
+              pageLength: 10,
+              language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json'
+              }
+            });
           });
         })
         .catch(error => {
@@ -248,7 +247,6 @@ export default {
         if (this.productoForm.barcode) {
           this.generarCodigoBarras();
         }
-       
       });
     },
     cancelarFormulario() {
@@ -256,8 +254,7 @@ export default {
     },
     crearProducto() {
       this.productoForm.barcode = this.generarCodigoBarrasUnico();
-    
-      axios.post('http://localhost:8081/productos', this.productoForm)
+      axios.post('http://localhost:8082/productos', this.productoForm)
         .then(() => {
           this.obtenerProductos();
           this.mostrarFormulario = false;
@@ -267,8 +264,7 @@ export default {
         });
     },
     actualizarProducto() {
-      // No actualizar barcode y qrcode al editar
-      axios.put(`http://localhost:8081/productos/${this.productoForm.id}`, this.productoForm)
+      axios.put(`http://localhost:8082/productos/${this.productoForm.id}`, this.productoForm)
         .then(() => {
           this.obtenerProductos();
           this.mostrarFormulario = false;
@@ -278,7 +274,7 @@ export default {
         });
     },
     eliminarProducto(id) {
-      axios.delete(`http://localhost:8081/productos/${id}`)
+      axios.delete(`http://localhost:8082/productos/${id}`)
         .then(() => {
           this.obtenerProductos();
         })
@@ -319,16 +315,16 @@ export default {
         peso: 0,
         informacionGarantia: 0,
         informacionEnvio: 0,
-        politicaRetorno: 0,
+        politicaDevolucion: 0,
         cantidadMinimaPedido: 0,
         tags: [],
         fechaCreacion: '',
         fechaActualizacion: '',
         barcode: '',
         qrcode: '',
-        width:null, 
-        height:null,
-        depth:null,
+        width: null,
+        height: null,
+        depth: null,
         imagen: '',
       };
     },
@@ -340,11 +336,9 @@ export default {
         });
       }
     },
-    
     generarCodigoBarrasUnico() {
       return Math.floor(1000000000000 + Math.random() * 9000000000000).toString();
     },
-    
     mostrarDetallesProducto(producto) {
       this.productoDetalles = { ...producto };
       this.mostrarDetalles = true;
@@ -355,7 +349,6 @@ export default {
             displayValue: true
           });
         }
-       
       });
     },
     cerrarDetalles() {
@@ -365,48 +358,3 @@ export default {
 };
 </script>
 
-<style>
-/* Estilos para la tabla */
-#productosTable {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 18px;
-}
-
-/* Estilos para el modal */
-.modal {
-  display: block;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-</style>
