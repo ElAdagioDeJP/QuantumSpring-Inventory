@@ -2,6 +2,7 @@
 target/
 build/
 
+
 # Archivos de configuración de Maven
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
