@@ -359,6 +359,7 @@ export default {
 </script>
 
 <style>
+/* a */
 /* Estilos para el modal */
 .modal {
   display: block;
