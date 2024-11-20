@@ -54,3 +54,5 @@ docker-compose.override.yml
 
 # Dependencias de Maven
 **/target/
+
+application.properties
