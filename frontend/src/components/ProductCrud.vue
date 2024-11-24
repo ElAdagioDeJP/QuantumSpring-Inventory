@@ -27,87 +27,127 @@
 
     <!-- Formulario para Crear/Editar Producto -->
     <div v-if="mostrarFormulario">
-      <h2>{{ editando ? 'Editar Producto' : 'Crear Producto' }}</h2>
-      <form @submit.prevent="editando ? actualizarProducto() : crearProducto()">
-        <!-- Campos del formulario -->
-        <label for="titulo">Título:</label>
-        <input type="text" v-model="productoForm.titulo" required>
-
-        <label for="descripcion">Descripción:</label>
-        <textarea v-model="productoForm.descripcion" required></textarea>
-
-        <label for="categoria">Categoría:</label>
-        <select v-model="productoForm.categoria" required>
-          <option v-for="categoria in categorias" :key="categoria" :value="categoria">{{ categoria }}</option>
-        </select>
-        <button @click="mostrarFormularioCrearCategoria">Crear Categoría</button>
-
-        <label for="precio">Precio:</label>
-        <input type="number" v-model="productoForm.precio" required>
-
-        <label for="descuento">Descuento (%):</label>
-        <input type="number" v-model="productoForm.descuento" required>
-
-        <label for="stock">Stock:</label>
-        <input type="number" v-model="productoForm.stock" required>
-
-        <label for="estadoDisponibilidad">Estado de Disponibilidad:</label>
-        <input type="text" v-model="productoForm.estadoDisponibilidad" id="estadoDisponibilidad" readonly />
-
-        <label for="marca">Marca:</label>
-        <input type="text" v-model="productoForm.marca" required>
-
-        <label for="sku">SKU:</label>
-        <input type="text" v-model="productoForm.sku" required>
-
-        <label for="peso">Peso:</label>
-        <input type="number" v-model="productoForm.peso" required>
-
-        <label for="width">Ancho:</label>
-        <input type="number" v-model="productoForm.width" required/>
-    
-        <label for="height">Alto:</label>
-        <input type="number" v-model="productoForm.height" required/>
-    
-        <label for="depth">Profundidad:</label>
-        <input type="number" v-model="productoForm.depth" required/>
-
-        <label for="informacionGarantia">Información de Garantía:</label>
-        <input type="number" v-model="productoForm.informacionGarantia" required>
-
-        <label for="informacionEnvio">Información de Envío:</label>
-        <input type="number" v-model="productoForm.informacionEnvio" required>
-
-        <label for="politicaDevolucion">Política de Retorno:</label>
-        <input type="number" v-model="productoForm.politicaDevolucion" required>
-
-        <label for="cantidadMinimaPedido">Cantidad Mínima de Pedido:</label>
-        <input type="number" v-model="productoForm.cantidadMinimaPedido" required>
-
-        <label for="imagen"> Imagen:</label>
-        <input type="text" v-model="productoForm.imagen"  />
-
-        <label for="tags">Tags:</label>
-        <input type="text" v-model="nuevoTag">
-        <button type="button" @click="agregarTag">Agregar Tag</button>
-        <ul>
-          <li v-for="(tag, index) in productoForm.tags" :key="index">
-            {{ tag }} <button type="button" @click="eliminarTag(index)">x</button>
-          </li>
-        </ul>
-        
-        <button type="submit">{{ editando ? 'Actualizar' : 'Crear' }}</button>
-        <button type="button" @click="cancelarFormulario">Cancelar</button>
-      </form>
-
-      <div v-if="productoForm.barcode">
-        <h3>Código de Barras</h3>
-        <svg id="barcode"></svg>
-      </div>
+  <h2>{{ editando ? 'Editar Producto' : 'Crear Producto' }}</h2>
+  <form @submit.prevent="editando ? actualizarProducto() : crearProducto()">
+    <!-- Campos del formulario -->
+    <div>
+      <label for="titulo">Título:</label>
+      <input type="text" v-model="productoForm.titulo" required>
     </div>
 
+    <div>
+      <label for="descripcion">Descripción:</label>
+      <textarea v-model="productoForm.descripcion" required></textarea>
+    </div>
+
+    <div>
+      <label for="categoria">Categoría:</label>
+      <select v-model="productoForm.categoria" required>
+        <option v-for="categoria in categorias" :key="categoria" :value="categoria">{{ categoria }}</option>
+      </select>
+      <button type="button" @click="mostrarFormularioCrearCategoria" id="categoria-b">Crear Categoría</button>
+    </div>
+
+    <div>
+      <label for="precio">Precio:</label>
+      <input type="number" v-model="productoForm.precio" required>
+    </div>
+
+    <div>
+      <label for="descuento">Descuento (%):</label>
+      <input type="number" v-model="productoForm.descuento" required>
+    </div>
+
+    <div>
+      <label for="stock">Stock:</label>
+      <input type="number" v-model="productoForm.stock" required>
+    </div>
+
+    <div>
+      <label for="estadoDisponibilidad">Estado de Disponibilidad:</label>
+      <input type="text" v-model="productoForm.estadoDisponibilidad" id="estadoDisponibilidad" readonly />
+    </div>
+
+    <div>
+      <label for="marca">Marca:</label>
+      <input type="text" v-model="productoForm.marca" required>
+    </div>
+
+    <div>
+      <label for="sku">SKU:</label>
+      <input type="text" v-model="productoForm.sku" required>
+    </div>
+
+    <div>
+      <label for="peso">Peso:</label>
+      <input type="number" v-model="productoForm.peso" required>
+    </div>
+
+    <div>
+      <label for="width">Ancho:</label>
+      <input type="number" v-model="productoForm.width" required />
+    </div>
+    
+    <div>
+      <label for="height">Alto:</label>
+      <input type="number" v-model="productoForm.height" required />
+    </div>
+    
+    <div>
+      <label for="depth">Profundidad:</label>
+      <input type="number" v-model="productoForm.depth" required />
+    </div>
+
+    <div>
+      <label for="informacionGarantia">Información de Garantía:</label>
+      <input type="number" v-model="productoForm.informacionGarantia" required>
+    </div>
+
+    <div>
+      <label for="informacionEnvio">Información de Envío:</label>
+      <input type="number" v-model="productoForm.informacionEnvio" required>
+    </div>
+
+    <div>
+      <label for="politicaDevolucion">Política de Retorno:</label>
+      <input type="number" v-model="productoForm.politicaDevolucion" required>
+    </div>
+
+    <div>
+      <label for="cantidadMinimaPedido">Cantidad Mínima de Pedido:</label>
+      <input type="number" v-model="productoForm.cantidadMinimaPedido" required>
+    </div>
+
+    <div>
+      <label for="imagen">Imagen:</label>
+      <input type="text" v-model="productoForm.imagen" />
+    </div>
+
+    <div id="tag">
+      <label for="tags">Tags:</label>
+      <input type="text" v-model="nuevoTag">
+      <button type="button" @click="agregarTag" id="categoria-b" >Agregar Tag</button>
+      <ul>
+        <li v-for="(tag, index) in productoForm.tags" :key="index">
+          {{ tag }} <button type="button" @click="eliminarTag(index)">x</button>
+        </li>
+      </ul>
+    </div>
+    
+
+      <button type="submit" @click="recargarPagina">{{ editando ? 'Actualizar' : 'Crear' }}</button>
+      <button type="button" @click="cancelarFormulario">Cancelar</button>
+
+  </form>
+
+  <div v-if="productoForm.barcode">
+    <h3>Código de Barras</h3>
+    <svg id="barcode"></svg>
+  </div>
+</div>
+
     <!-- Modal para mostrar detalles del producto -->
-    <div v-if="mostrarDetalles" class="modal">
+    <div v-if="mostrarDetalles">
       <div class="modal-content">
         <span class="close" @click="cerrarDetalles">&times;</span>
         <h2>Detalles del Producto</h2>
@@ -207,7 +247,11 @@ export default {
   created() {
     this.obtenerProductos();
   },
+  
   methods: {
+    recargarPagina() {
+    window.location.reload();
+    },
     obtenerProductos() {
       axios.get('http://localhost:8082/productos')
         .then(response => {
@@ -224,9 +268,6 @@ export default {
               info: true,
               lengthChange: true,
               pageLength: 10,
-              language: {
-                url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json'
-              }
             });
           });
         })

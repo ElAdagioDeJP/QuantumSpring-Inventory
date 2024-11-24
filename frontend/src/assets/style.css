@@ -42,6 +42,43 @@
     margin: 20px 0;
     font-size: 18px;
     text-align: left;
+  }
+  
+  #productosTable thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+  }
+  
+  #productosTable th,
+  #productosTable td {
+    padding: 12px 15px;
+  }
+  
+  #productosTable tbody tr {
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  #productosTable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+  
+  #productosTable tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+  }
+  
+  #productosTable tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+  }
+/* Estilos para la tabla */
+#productosTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
 }
 
 #productosTable thead tr {
@@ -408,7 +445,7 @@ form input:focus, form textarea:focus, form select:focus {
 
 form button {
   width: 100%;
-  background-color: #28a745;
+  background-color: #007bff;
   color: white;
   padding: 10px;
   border-radius: 4px;
@@ -417,7 +454,7 @@ form button {
 }
 
 form button:hover {
-  background-color: #218838;
+  background-color: #0056b3;
 }
 
 /* Modal */
@@ -489,7 +526,33 @@ ul li button {
 ul li button:hover {
   background-color: #c82333;
 }
+form {
+  width: 600px;
+  display: flexbox;
+}
 
+form div{
+  width: 33%;
+  display: inline-block;
+}
+form div button{
+  width: 50%;
+}
+#tag{
+  display: block;
+}
+#categoria-b{
+  background-color: #28a745;
+}
+#categoria-b:hover{
+  background-color: #218838;
+}
+form input, form textarea, form select{
+  width: 60%;
+}
+form button{
+  width: 48%;
+}
 /* Responsividad */
 @media (max-width: 768px) {
   table {
@@ -500,4 +563,63 @@ ul li button:hover {
     width: 90%;
     padding: 15px;
   }
+  form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 600px;
+  margin: 20px auto;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten al tamaño disponible */
+  gap: 10px; /* Espaciado entre los elementos */
+}
+
+form input, 
+form textarea, 
+form select, 
+form button {
+  flex: 1 1 calc(33.333% - 10px); /* Ocupa 1/3 del espacio disponible menos el gap */
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+form button:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}
+
+/* Responsividad: Ajustar para pantallas pequeñas */
+@media (max-width: 768px) {
+  form input, 
+  form textarea, 
+  form select, 
+  form button {
+    flex: 1 1 100%; /* Ocupa el ancho completo en pantallas pequeñas */
+  }
+}
+form button {
+  background-color: #007bff;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
 }

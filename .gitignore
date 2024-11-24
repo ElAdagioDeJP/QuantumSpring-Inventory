@@ -2,7 +2,8 @@
 node_modules
 /dist
 .vscode/
-
+resources/
+CRUD/src/main/resources/application.properties
 # local env files
 .env.local
 .env.*.local
