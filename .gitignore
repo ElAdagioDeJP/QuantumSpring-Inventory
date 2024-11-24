@@ -4,6 +4,8 @@ node_modules
 .vscode/
 resources/
 CRUD/src/main/resources/application.properties
+application.properties
+
 # local env files
 .env.local
 .env.*.local
