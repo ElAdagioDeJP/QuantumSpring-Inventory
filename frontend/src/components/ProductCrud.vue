@@ -49,19 +49,19 @@
     </div>
 
     <div>
-      <label for="precio">Precio:</label>
-      <input type="number" v-model="productoForm.precio" required>
-    </div>
+  <label for="precio">Precio:</label>
+  <input type="number" v-model="productoForm.precio" required @input="validarNumeroPositivo('precio')">
+</div>
 
     <div>
-      <label for="descuento">Descuento (%):</label>
-      <input type="number" v-model="productoForm.descuento" required>
-    </div>
+  <label for="descuento">Descuento (%):</label>
+  <input type="number" v-model="productoForm.descuento" min="0" max="100" required @input="validarDescuento">
+  </div>
 
-    <div>
-      <label for="stock">Stock:</label>
-      <input type="number" v-model="productoForm.stock" required>
-    </div>
+  <div>
+  <label for="stock">Stock:</label>
+  <input type="number" v-model="productoForm.stock" required @input="validarNumeroPositivo('stock')">
+  </div>
 
     <div>
       <label for="estadoDisponibilidad">Estado de Disponibilidad:</label>
@@ -79,46 +79,46 @@
     </div>
 
     <div>
-      <label for="peso">Peso:</label>
-      <input type="number" v-model="productoForm.peso" required>
-    </div>
+  <label for="peso">Peso:</label>
+  <input type="number" v-model="productoForm.peso" required @input="validarNumeroPositivo('peso')">
+  </div>
 
     <div>
-      <label for="width">Ancho:</label>
-      <input type="number" v-model="productoForm.width" required />
-    </div>
+  <label for="width">Ancho:</label>
+  <input type="number" v-model="productoForm.width" required @input="validarNumeroPositivo('width')">
+  </div>
     
     <div>
-      <label for="height">Alto:</label>
-      <input type="number" v-model="productoForm.height" required />
-    </div>
+   <label for="height">Alto:</label>
+   <input type="number" v-model="productoForm.height" required @input="validarNumeroPositivo('height')">
+  </div>
     
     <div>
-      <label for="depth">Profundidad:</label>
-      <input type="number" v-model="productoForm.depth" required />
-    </div>
+  <label for="depth">Profundidad:</label>
+  <input type="number" v-model="productoForm.depth" required @input="validarNumeroPositivo('depth')">
+  </div>
 
-    <div>
-      <label for="informacionGarantia">Información de Garantía:</label>
-      <input type="number" v-model="productoForm.informacionGarantia" required>
-    </div>
+  <div>
+  <label for="informacionGarantia">Información de Garantía:</label>
+  <input type="number" v-model="productoForm.informacionGarantia" required @input="validarNumeroPositivo('informacionGarantia')">
+  </div>
 
-    <div>
-      <label for="informacionEnvio">Información de Envío:</label>
-      <input type="number" v-model="productoForm.informacionEnvio" required>
-    </div>
+  <div>
+  <label for="informacionEnvio">Información de Envío:</label>
+  <input type="number" v-model="productoForm.informacionEnvio" required @input="validarNumeroPositivo('informacionEnvio')">
+  </div>
 
-    <div>
-      <label for="politicaDevolucion">Política de Retorno:</label>
-      <input type="number" v-model="productoForm.politicaDevolucion" required>
-    </div>
+  <div>
+  <label for="politicaDevolucion">Política de Retorno:</label>
+  <input type="number" v-model="productoForm.politicaDevolucion" required @input="validarNumeroPositivo('politicaDevolucion')">
+  </div>
 
-    <div>
-      <label for="cantidadMinimaPedido">Cantidad Mínima de Pedido:</label>
-      <input type="number" v-model="productoForm.cantidadMinimaPedido" required>
-    </div>
+  <div>
+  <label for="cantidadMinimaPedido">Cantidad Mínima de Pedido:</label>
+  <input type="number" v-model="productoForm.cantidadMinimaPedido" required @input="validarNumeroPositivo('cantidadMinimaPedido')">
+  </div>
 
-    <div>
+        <div>
       <label for="imagen">Imagen:</label>
       <input type="text" v-model="productoForm.imagen" />
     </div>
@@ -133,7 +133,10 @@
         </li>
       </ul>
     </div>
-    
+    <div>
+      <label for="qrcode">QR Code:</label>
+      <input type="text" v-model="productoForm.qrcode" />
+    </div>
 
       <button type="submit" @click="recargarPagina">{{ editando ? 'Actualizar' : 'Crear' }}</button>
       <button type="button" @click="cancelarFormulario">Cancelar</button>
@@ -174,10 +177,16 @@
           <p><strong>Imagen(Url):</strong></p>
           <img :src="productoDetalles.imagen" alt="Imagen del Producto" />
         </div>
+        <div v-if="productoDetalles.qrcode">
+        <h3>QR Code</h3>
+        <canvas id="detalleQRCode"></canvas>
+        </div>
+
         <div v-if="productoDetalles.barcode">
           <h3>Código de Barras</h3>
           <svg id="detalleBarcode"></svg>
         </div>
+        
       </div>
     </div>
 
@@ -198,6 +207,7 @@ import axios from 'axios';
 import $ from 'jquery';
 import 'datatables.net';
 import JsBarcode from 'jsbarcode';
+import QRCode from 'qrcode';
 
 export default {
   data() {
@@ -294,6 +304,10 @@ export default {
       this.mostrarFormulario = false;
     },
     crearProducto() {
+      const uniqueQRCode = this.generarQRCodeUnico();
+      const baseURL = "https://tumama/";
+      this.productoForm.qrcode = baseURL + uniqueQRCode;
+
       this.productoForm.barcode = this.generarCodigoBarrasUnico();
       axios.post('http://localhost:8082/productos', this.productoForm)
         .then(() => {
@@ -377,8 +391,24 @@ export default {
         });
       }
     },
+
+    generarQRCode(data) {
+      return QRCode.toCanvas(document.getElementById('detalleQRCode'), data, { errorCorrectionLevel: 'H' });
+    },
+    generarQRCodeUnico() {
+      const uniqueQRCode = Math.floor(1000000000000 + Math.random() * 9000000000000).toString();
+      return uniqueQRCode;
+    },
     generarCodigoBarrasUnico() {
       return Math.floor(1000000000000 + Math.random() * 9000000000000).toString();
+    },
+
+    validarDescuento() {
+      if (this.productoForm.descuento < 0) {
+        this.productoForm.descuento = 0;
+      } else if (this.productoForm.descuento > 100) {
+        this.productoForm.descuento = 100;
+      }
     },
     mostrarDetallesProducto(producto) {
       this.productoDetalles = { ...producto };
@@ -390,7 +420,21 @@ export default {
             displayValue: true
           });
         }
+        if (this.productoDetalles.qrcode) {
+          this.generarQRCode(this.productoDetalles.qrcode)
+            .then(url => {
+              this.productoDetalles.qrcode = url;
+            })
+            .catch(err => {
+              console.error("Hubo un error al generar el QR code:", err);
+            });
+        }
       });
+    },
+    validarNumeroPositivo(campo) {
+      if (this.productoForm[campo] < 0) {
+        this.productoForm[campo] = 0;
+      }
     },
     cerrarDetalles() {
       this.mostrarDetalles = false;
@@ -408,7 +452,8 @@ export default {
   z-index: 1;
   left: 0;
   top: 0;
-  width: 100%;
+  width: 0%;
+  width: 0%;
   height: 100%;
   overflow: auto;
   background-color: rgb(0,0,0);
@@ -418,9 +463,11 @@ export default {
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
-  padding: 20px;
+  padding: 10px;
+  padding: 10px;
   border: 1px solid #888;
-  width: 80%;
+  width: 50%;
+  width: 50%;
 }
 
 .close {
