@@ -150,45 +150,45 @@
 </div>
 
     <!-- Modal para mostrar detalles del producto -->
-    <div v-if="mostrarDetalles">
-      <div class="modal-content">
-        <span class="close" @click="cerrarDetalles">&times;</span>
-        <h2>Detalles del Producto</h2>
-        <p><strong>Id:</strong> {{ productoDetalles.id }}</p>
-        <p><strong>Título:</strong> {{ productoDetalles.titulo }}</p>
-        <p><strong>Descripción:</strong> {{ productoDetalles.descripcion }}</p>
-        <p><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
-        <p><strong>Precio:</strong> {{ productoDetalles.precio }}</p>
-        <p><strong>Descuento:</strong> {{ productoDetalles.descuento }}%</p>
-        <p><strong>Stock:</strong> {{ productoDetalles.stock }}</p>
-        <p><strong>Estado Disponibilidad:</strong> {{ productoDetalles.estadoDisponibilidad }}</p>
-        <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
-        <p><strong>SKU:</strong> {{ productoDetalles.sku }}</p>
-        <p><strong>Peso:</strong> {{ productoDetalles.peso }}</p>
-        <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }} Días</p>
-        <p><strong>Información de Envío:</strong> Se envia en {{ productoDetalles.informacionEnvio }} Dias</p>
-        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }} Dias</p>
-        <p><strong>Cantidad Mínima de Pedido:</strong> {{ productoDetalles.cantidadMinimaPedido }}</p>
-        <p><strong>Tags:</strong> {{ productoDetalles.tags.join(', ') }}</p>
-        <p><strong>Ancho:</strong> {{ productoDetalles.width }}</p>
-        <p><strong>Alto:</strong> {{ productoDetalles.height }}</p>
-        <p><strong>Profundidad:</strong> {{ productoDetalles.depth }}</p>
-        <div v-if="productoDetalles.imagen">
-          <p><strong>Imagen(Url):</strong></p>
-          <img :src="productoDetalles.imagen" alt="Imagen del Producto" />
-        </div>
-        <div v-if="productoDetalles.qrcode">
-        <h3>QR Code</h3>
-        <canvas id="detalleQRCode"></canvas>
-        </div>
-
-        <div v-if="productoDetalles.barcode">
-          <h3>Código de Barras</h3>
-          <svg id="detalleBarcode"></svg>
-        </div>
-        
-      </div>
+    <!-- Modal para mostrar detalles del producto -->
+<div v-if="mostrarDetalles" class="modal-overlay">
+  <div class="modal-content">
+    <span class="close" @click="cerrarDetalles">&times;</span>
+    <h2>Detalles del Producto</h2>
+    <p><strong>Id:</strong> {{ productoDetalles.id }}</p>
+    <p><strong>Título:</strong> {{ productoDetalles.titulo }}</p>
+    <p><strong>Descripción:</strong> {{ productoDetalles.descripcion }}</p>
+    <p><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
+    <p><strong>Precio:</strong> {{ productoDetalles.precio }}</p>
+    <p><strong>Descuento:</strong> {{ productoDetalles.descuento }}%</p>
+    <p><strong>Stock:</strong> {{ productoDetalles.stock }}</p>
+    <p><strong>Estado Disponibilidad:</strong> {{ productoDetalles.estadoDisponibilidad }}</p>
+    <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
+    <p><strong>SKU:</strong> {{ productoDetalles.sku }}</p>
+    <p><strong>Peso:</strong> {{ productoDetalles.peso }}</p>
+    <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }}</p>
+    <p><strong>Información de Envío:</strong> {{ productoDetalles.informacionEnvio }}</p>
+    <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }}</p>
+    <p><strong>Cantidad Mínima de Pedido:</strong> {{ productoDetalles.cantidadMinimaPedido }}</p>
+    <p><strong>Tags:</strong> {{ productoDetalles.tags.join(', ') }}</p>
+    <p><strong>Ancho:</strong> {{ productoDetalles.width }}</p>
+    <p><strong>Alto:</strong> {{ productoDetalles.height }}</p>
+    <p><strong>Profundidad:</strong> {{ productoDetalles.depth }}</p>
+    <div v-if="productoDetalles.imagen">
+      <p><strong>Imagen (URL):</strong></p>
+      <img :src="productoDetalles.imagen" alt="Imagen del Producto" />
     </div>
+    <div v-if="productoDetalles.qrcode">
+      <h3>QR Code</h3>
+      <canvas id="detalleQRCode"></canvas>
+    </div>
+    <div v-if="productoDetalles.barcode">
+      <h3>Código de Barras</h3>
+      <svg id="detalleBarcode"></svg>
+    </div>
+  </div>
+</div>
+
 
     <!-- Formulario para Crear Categoría -->
     <div v-if="mostrarFormularioCategoria">
@@ -440,45 +440,3 @@ export default {
   }
 };
 </script>
-
-<style>
-/* a */
-/* Estilos para el modal */
-.modal {
-  display: block;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 0%;
-  width: 0%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 10px;
-  padding: 10px;
-  border: 1px solid #888;
-  width: 50%;
-  width: 50%;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-</style>
