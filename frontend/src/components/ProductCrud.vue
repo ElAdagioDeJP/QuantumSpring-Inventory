@@ -165,9 +165,9 @@
         <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
         <p><strong>SKU:</strong> {{ productoDetalles.sku }}</p>
         <p><strong>Peso:</strong> {{ productoDetalles.peso }}</p>
-        <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }}</p>
-        <p><strong>Información de Envío:</strong> {{ productoDetalles.informacionEnvio }}</p>
-        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }}</p>
+        <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }} Días</p>
+        <p><strong>Información de Envío:</strong> Se envia en {{ productoDetalles.informacionEnvio }} Dias</p>
+        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }} Dias</p>
         <p><strong>Cantidad Mínima de Pedido:</strong> {{ productoDetalles.cantidadMinimaPedido }}</p>
         <p><strong>Tags:</strong> {{ productoDetalles.tags.join(', ') }}</p>
         <p><strong>Ancho:</strong> {{ productoDetalles.width }}</p>
@@ -213,7 +213,7 @@ export default {
   data() {
     return {
       productos: [],
-      categorias: ['Electrónica', 'Ropa', 'Hogar'],
+      categorias: ['Electrónica', 'Ropa', 'Hogar',],
       mostrarFormulario: false,
       mostrarFormularioCategoria: false,
       mostrarDetalles: false,
