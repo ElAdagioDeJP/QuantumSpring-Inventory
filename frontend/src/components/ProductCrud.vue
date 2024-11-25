@@ -123,7 +123,7 @@
       <input type="text" v-model="productoForm.imagen" />
     </div>
 
-    <div id="tag">
+    <div>
       <label for="tags">Tags:</label>
       <input type="text" v-model="nuevoTag">
       <button type="button" @click="agregarTag" id="categoria-b" >Agregar Tag</button>
@@ -133,12 +133,12 @@
         </li>
       </ul>
     </div>
-    <div>
+    <div id="tag">
       <label for="qrcode">QR Code:</label>
       <input type="text" v-model="productoForm.qrcode" />
     </div>
 
-      <button type="submit" @click="recargarPagina">{{ editando ? 'Actualizar' : 'Crear' }}</button>
+      <button type="submit">{{ editando ? 'Actualizar' : 'Crear' }}</button>
       <button type="button" @click="cancelarFormulario">Cancelar</button>
 
   </form>
@@ -223,16 +223,16 @@ export default {
         titulo: '',
         descripcion: '',
         categoria: '',
-        precio: 0,
-        descuento: 0,
-        stock: 0,
+        precio: null,
+        descuento: null,
+        stock: null,
         marca: '',
         sku: '',
-        peso: 0,
-        informacionGarantia: 0,
-        informacionEnvio: 0,
-        politicaDevolucion: 0,
-        cantidadMinimaPedido: 0,
+        peso: '',
+        informacionGarantia:null,
+        informacionEnvio: null,
+        politicaDevolucion: null,
+        cantidadMinimaPedido: null,
         tags: [],
         fechaCreacion: '',
         fechaActualizacion: '',
@@ -259,9 +259,6 @@ export default {
   },
   
   methods: {
-    recargarPagina() {
-    window.location.reload();
-    },
     obtenerProductos() {
       axios.get('http://localhost:8082/productos')
         .then(response => {
@@ -317,6 +314,7 @@ export default {
         .catch(error => {
           console.error("Hubo un error al crear el producto:", error.response ? error.response.data : error.message);
         });
+        window.location.reload();
     },
     actualizarProducto() {
       axios.put(`http://localhost:8082/productos/${this.productoForm.id}`, this.productoForm)
@@ -362,16 +360,16 @@ export default {
         titulo: '',
         descripcion: '',
         categoria: '',
-        precio: 0,
-        descuento: 0,
-        stock: 0,
+        precio: null,
+        descuento: null,
+        stock: null,
         marca: '',
         sku: '',
-        peso: 0,
-        informacionGarantia: 0,
-        informacionEnvio: 0,
-        politicaDevolucion: 0,
-        cantidadMinimaPedido: 0,
+        peso: null,
+        informacionGarantia: null,
+        informacionEnvio: null,
+        politicaDevolucion: null,
+        cantidadMinimaPedido: null,
         tags: [],
         fechaCreacion: '',
         fechaActualizacion: '',
