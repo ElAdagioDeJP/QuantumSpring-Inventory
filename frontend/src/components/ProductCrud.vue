@@ -55,12 +55,12 @@
 
           <div>
             <label for="precio">Precio:</label>
-            <input type="number" v-model="productoForm.precio" required @input="validarNumeroPositivo('precio')">
+            <input type="number" v-model="productoForm.precio" required @input="validarNumeroPositivo('precio')" step="any">
           </div>
 
           <div>
             <label for="descuento">Descuento (%):</label>
-            <input type="number" v-model="productoForm.descuento" min="0" max="100" required @input="validarDescuento">
+            <input type="number" v-model="productoForm.descuento" min="0" max="100" required @input="validarDescuento" step="any">
           </div>
 
           <div>
@@ -85,22 +85,22 @@
 
           <div>
             <label for="peso">Peso:</label>
-            <input type="number" v-model="productoForm.peso" required @input="validarNumeroPositivo('peso')">
+            <input type="number" v-model="productoForm.peso" required @input="validarNumeroPositivo('peso')" step="any">
           </div>
 
           <div>
             <label for="width">Ancho:</label>
-            <input type="number" v-model="productoForm.width" required @input="validarNumeroPositivo('width')">
+            <input type="number" v-model="productoForm.width" required @input="validarNumeroPositivo('width')" step="any">
           </div>
 
           <div>
             <label for="height">Alto:</label>
-            <input type="number" v-model="productoForm.height" required @input="validarNumeroPositivo('height')">
+            <input type="number" v-model="productoForm.height" required @input="validarNumeroPositivo('height')" step="any">
           </div>
 
           <div>
             <label for="depth">Profundidad:</label>
-            <input type="number" v-model="productoForm.depth" required @input="validarNumeroPositivo('depth')">
+            <input type="number" v-model="productoForm.depth" required @input="validarNumeroPositivo('depth')" step="any">
           </div>
 
           <div>
@@ -272,9 +272,7 @@ export default {
     obtenerProductos() {
       axios.get('http://localhost:8082/productos')
         .then(response => {
-          if ($.fn.dataTable.isDataTable('#productosTable')) {
-            $('#productosTable').DataTable().destroy();
-          }
+          
           this.productos = response.data;
           //definimos el datatable importante para que funcione
           this.$nextTick(function () {
@@ -285,6 +283,9 @@ export default {
               info: true,
               lengthChange: true,
               pageLength: 10,
+              language: {
+                url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+              }
             });
           });
         })
