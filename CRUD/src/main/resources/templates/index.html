@@ -40,7 +40,7 @@
       <input v-model="productoForm.titulo" placeholder="Título" required>
       <input v-model="productoForm.descripcion" placeholder="Descripción" required>
       <input v-model="productoForm.categoria" placeholder="Categoría" required>
-      <input v-model="productoForm.precio" placeholder="Precio" type="number" required>
+      <input v-model="productoForm.precio" placeholder="Precio" type="number"  step="any">
       <button type="submit">{{ editando ? 'Actualizar' : 'Crear' }}</button>
     </form>
   </div>

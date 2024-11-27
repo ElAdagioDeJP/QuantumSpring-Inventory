@@ -10,7 +10,7 @@
         <tr>
           <th>Nombre</th>
           <th>Categoría</th>
-          <th>Precio</th>
+          <th>Precio$</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -169,16 +169,16 @@
         <p><strong>Título:</strong> {{ productoDetalles.titulo }}</p>
         <p><strong>Descripción:</strong> {{ productoDetalles.descripcion }}</p>
         <p><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
-        <p><strong>Precio:</strong> {{ productoDetalles.precio }}</p>
+        <p><strong>Precio:</strong> {{ productoDetalles.precio }}$</p>
         <p><strong>Descuento:</strong> {{ productoDetalles.descuento }}%</p>
         <p><strong>Stock:</strong> {{ productoDetalles.stock }}</p>
         <p><strong>Estado Disponibilidad:</strong> {{ productoDetalles.estadoDisponibilidad }}</p>
         <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
         <p><strong>SKU:</strong> {{ productoDetalles.sku }}</p>
         <p><strong>Peso:</strong> {{ productoDetalles.peso }}</p>
-        <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }}</p>
-        <p><strong>Información de Envío:</strong> {{ productoDetalles.informacionEnvio }}</p>
-        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }}</p>
+        <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }} Dias</p>
+        <p><strong>Envío en:</strong> {{ productoDetalles.informacionEnvio }} Dias</p>
+        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }} Dias</p>
         <p><strong>Cantidad Mínima de Pedido:</strong> {{ productoDetalles.cantidadMinimaPedido }}</p>
         <p><strong>Tags:</strong> {{ productoDetalles.tags.join(', ') }}</p>
         <p><strong>Ancho:</strong> {{ productoDetalles.width }}</p>
