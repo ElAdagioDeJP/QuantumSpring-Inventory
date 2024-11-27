@@ -5,6 +5,7 @@
       <h1>Quantum Inventory</h1>
     </nav>
     <button @click="mostrarFormularioCrear">Crear Producto</button>
+    
     <table id="productosTable" class="display">
       <thead>
         <tr>
@@ -33,7 +34,8 @@
       <div class="modal-content">
         <h2>{{ editando ? 'Editar Producto' : 'Crear Producto' }}</h2>
         <span class="close" @click="cerrarFormulario">&times;</span>
-        <form @submit.prevent="editando ? actualizarProducto() : crearProducto()" id="form-form" style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0)">
+        <form @submit.prevent="editando ? actualizarProducto() : crearProducto()" id="form-form"
+          style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0)">
           <!-- Campos del formulario -->
           <div>
             <label for="titulo">Título:</label>
@@ -55,12 +57,14 @@
 
           <div>
             <label for="precio">Precio:</label>
-            <input type="number" v-model="productoForm.precio" required @input="validarNumeroPositivo('precio')" step="any">
+            <input type="number" v-model="productoForm.precio" required @input="validarNumeroPositivo('precio')"
+              step="any">
           </div>
 
           <div>
             <label for="descuento">Descuento (%):</label>
-            <input type="number" v-model="productoForm.descuento" min="0" max="100" required @input="validarDescuento" step="any">
+            <input type="number" v-model="productoForm.descuento" min="0" max="100" required @input="validarDescuento"
+              step="any">
           </div>
 
           <div>
@@ -90,17 +94,20 @@
 
           <div>
             <label for="width">Ancho:</label>
-            <input type="number" v-model="productoForm.width" required @input="validarNumeroPositivo('width')" step="any">
+            <input type="number" v-model="productoForm.width" required @input="validarNumeroPositivo('width')"
+              step="any">
           </div>
 
           <div>
             <label for="height">Alto:</label>
-            <input type="number" v-model="productoForm.height" required @input="validarNumeroPositivo('height')" step="any">
+            <input type="number" v-model="productoForm.height" required @input="validarNumeroPositivo('height')"
+              step="any">
           </div>
 
           <div>
             <label for="depth">Profundidad:</label>
-            <input type="number" v-model="productoForm.depth" required @input="validarNumeroPositivo('depth')" step="any">
+            <input type="number" v-model="productoForm.depth" required @input="validarNumeroPositivo('depth')"
+              step="any">
           </div>
 
           <div>
@@ -156,6 +163,14 @@
           <h3>Código de Barras</h3>
           <svg id="barcode"></svg>
         </div>
+        <div v-if="mostrarFormularioCategoria">
+          <h2>Crear Categoría</h2>
+          <form @submit.prevent="crearCategoria">
+            <label for="nuevaCategoria">Nueva Categoría:</label>
+            <input type="text" v-model="nuevaCategoria" required>
+            <button type="submit">Crear</button>
+          </form>
+        </div>
       </div>
     </div>
 
@@ -201,14 +216,6 @@
 
 
     <!-- Formulario para Crear Categoría -->
-    <div v-if="mostrarFormularioCategoria">
-      <h2>Crear Categoría</h2>
-      <form @submit.prevent="crearCategoria">
-        <label for="nuevaCategoria">Nueva Categoría:</label>
-        <input type="text" v-model="nuevaCategoria" required>
-        <button type="submit">Crear</button>
-      </form>
-    </div>
   </div>
 </template>
 
@@ -275,6 +282,7 @@ export default {
           if ($.fn.dataTable.isDataTable('#productosTable')) {
           $('#productosTable').DataTable().destroy(); // Destruye la instancia existente de DataTable
         }
+
           this.productos = response.data;
           //definimos el datatable importante para que funcione
           this.$nextTick(function () {
@@ -458,10 +466,11 @@ export default {
 </script>
 <style scoped>
 /* Botones */
-h1{
+h1 {
   color: white;
   padding: 0;
 }
+
 .btn {
   padding: 10px 15px;
   border: none;
@@ -492,7 +501,7 @@ h1{
   color: white;
 }
 
-#form-form{
+#form-form {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -500,6 +509,7 @@ h1{
   border-radius: 0;
   box-shadow: 0;
 }
+
 .btn:hover {
   transform: scale(1.05);
   opacity: 0.9;
