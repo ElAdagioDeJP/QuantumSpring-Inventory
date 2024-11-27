@@ -272,7 +272,9 @@ export default {
     obtenerProductos() {
       axios.get('http://localhost:8082/productos')
         .then(response => {
-          
+          if ($.fn.dataTable.isDataTable('#productosTable')) {
+          $('#productosTable').DataTable().destroy(); // Destruye la instancia existente de DataTable
+        }
           this.productos = response.data;
           //definimos el datatable importante para que funcione
           this.$nextTick(function () {
