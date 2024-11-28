@@ -112,19 +112,19 @@
 
           <div>
             <label for="informacionGarantia">Información de Garantía:</label>
-            <input type="number" v-model="productoForm.informacionGarantia" required
+            <input type="text" v-model="productoForm.informacionGarantia" required
               @input="validarNumeroPositivo('informacionGarantia')">
           </div>
 
           <div>
             <label for="informacionEnvio">Información de Envío:</label>
-            <input type="number" v-model="productoForm.informacionEnvio" required
+            <input type="text" v-model="productoForm.informacionEnvio" required
               @input="validarNumeroPositivo('informacionEnvio')">
           </div>
 
           <div>
             <label for="politicaDevolucion">Política de Retorno:</label>
-            <input type="number" v-model="productoForm.politicaDevolucion" required
+            <input type="text" v-model="productoForm.politicaDevolucion" required
               @input="validarNumeroPositivo('politicaDevolucion')">
           </div>
 
@@ -293,9 +293,6 @@ export default {
               info: true,
               lengthChange: true,
               pageLength: 10,
-              language: {
-                url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-              }
             });
           });
         })
@@ -489,6 +486,10 @@ h1 {
 .btn-editar {
   background-color: #17a2b8;
   color: white;
+}
+
+.modal-content img{
+  width:50%;
 }
 
 .btn-eliminar {
