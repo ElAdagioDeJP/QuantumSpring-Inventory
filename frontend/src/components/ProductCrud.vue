@@ -186,6 +186,7 @@
         <p><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
         <p><strong>Precio:</strong> {{ productoDetalles.precio }}$</p>
         <p><strong>Descuento:</strong> {{ productoDetalles.descuento }}%</p>
+        <p><strong>Rating Promedio:</strong> {{ productoDetalles.ratingPromedio }}</p>
         <p><strong>Stock:</strong> {{ productoDetalles.stock }}</p>
         <p><strong>Estado Disponibilidad:</strong> {{ productoDetalles.estadoDisponibilidad }}</p>
         <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
@@ -210,12 +211,59 @@
         <div v-if="productoDetalles.barcode">
           <h3>Código de Barras</h3>
           <svg id="detalleBarcode"></svg>
-        </div>
+      </div>
+      <!-- Botón para mostrar el formulario de reviews -->
+<button @click="mostrarFormularioReview = true">Crear Review</button>
+
+
+<!-- Formulario para crear una review -->
+<div v-if="mostrarFormularioReview" class="modal-overlay">
+  <div class="modal-content">
+    <span class="close" @click="mostrarFormularioReview = false">&times;</span>
+    <h3>Crear Review</h3>
+    <form @submit.prevent="crearReview">
+      <div>
+        <label for="nombre">Nombre:</label>
+        <input type="text" v-model="nuevaReview.reviewerName" required />
+      </div>
+      <div>
+        <label for="correo">Correo:</label>
+        <input type="email" v-model="nuevaReview.reviewerEmail" required />
+      </div>
+      <div>
+        <label for="comentario">Comentario:</label>
+        <textarea v-model="nuevaReview.comment" required></textarea>
+      </div>
+      <div>
+        <label for="calificacion">Calificación:</label>
+        <input type="number" v-model="nuevaReview.rating" min="1" max="5" required />
+      </div>
+      <button type="submit" >Guardar Review</button>    </form>
+  </div>
+</div>
+
+<!-- Lista de reviews -->
+<div>
+  <h3>Reviews</h3>
+  <div v-if="productoDetalles.reviews && productoDetalles.reviews.length">
+    <ul>
+      <li v-for="(review, index) in productoDetalles.reviews" :key="index">
+        <p><strong>Nombre: {{ review.reviewerName }}</strong> ({{ review.rating }}/5)</p>
+        <p><strong>Correo:</strong> {{ review.reviewerEmail}}</p>
+        <p><strong>Comentario:</strong> {{ review.comment }}</p>
+        <p><strong>Fecha:</strong> {{ review.date }}</p>
+      </li>
+    </ul>
+  </div>
+  <p v-else>No hay reviews para este producto.</p>
+</div>
+
+
       </div>
     </div>
 
 
-    <!-- Formulario para Crear Categoría -->
+   
   </div>
 </template>
 
@@ -235,6 +283,16 @@ export default {
       mostrarFormularioCategoria: false,
       mostrarDetalles: false,
       editando: false,
+      mostrarFormularioReview: false, // Controla la visibilidad del formulario de reviews
+       nuevaReview: {
+        rating: null,
+        comment: '',
+        date: '',
+        reviewerName: '',
+        reviewerEmail: ''
+     
+      
+    },
       productoForm: {
         id: null,
         titulo: '',
@@ -251,6 +309,7 @@ export default {
         politicaDevolucion: null,
         cantidadMinimaPedido: null,
         tags: [],
+        reviews: [],
         fechaCreacion: '',
         fechaActualizacion: '',
         barcode: '',
@@ -260,8 +319,12 @@ export default {
         depth: null,
         estadoDisponibilidad: '',
         imagen: '',
+        ratingPromedio: 0
+        
       },
-      productoDetalles: {},
+      productoDetalles: {
+       
+      },
       nuevaCategoria: '',
       nuevoTag: '',
     };
@@ -293,9 +356,7 @@ export default {
               info: true,
               lengthChange: true,
               pageLength: 10,
-              language: {
-                url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-              }
+           
             });
           });
         })
@@ -392,6 +453,7 @@ export default {
         politicaDevolucion: null,
         cantidadMinimaPedido: null,
         tags: [],
+        ratingPromedio: 0,
         fechaCreacion: '',
         fechaActualizacion: '',
         barcode: '',
@@ -449,7 +511,62 @@ export default {
             });
         }
       });
+      this.calcularRatingPromedio();
     },
+
+    
+
+    obtenerProductoDetalles(id) {
+    axios.get(`/productos/${id}`)
+      .then(response => {
+        this.productoDetalles = response.data;
+        this.productoDetalles.reviews = response.data.reviews || [];
+        this.calcularRatingPromedio();
+      })
+      .catch(error => {
+        console.error("Hubo un error al obtener los detalles del producto:", error);
+      });
+  },
+
+  crearReview() {
+  if (!this.productoDetalles.reviews) {
+    this.productoDetalles.reviews = [];
+  }
+
+  const nuevaReview = {
+    reviewerName: this.nuevaReview.reviewerName,
+    reviewerEmail: this.nuevaReview.reviewerEmail,
+    comment: this.nuevaReview.comment,
+    rating: this.nuevaReview.rating,
+    date: new Date().toISOString()// Cambiado a formato ISO
+  };
+  console.log("Nueva review:", nuevaReview);
+
+  // Enviar la nueva review al backend
+  axios.post(`http://localhost:8082/productos/${this.productoDetalles.id}/reviews`, nuevaReview)
+    .then(response => {
+      // Agregar la nueva review al producto
+      this.productoDetalles.reviews.push(response.data);
+
+      // Limpiar el formulario
+      this.nuevaReview = { reviewerName: '', reviewerEmail: '', comment: '', rating: 0 };
+      this.mostrarFormularioReview = false;
+    })
+    .catch(error => {
+      console.error("Hubo un error al crear la review:", error);
+    });
+},
+
+calcularRatingPromedio() {
+      if (this.productoDetalles.reviews.length === 0) {
+        this.productoDetalles.ratingPromedio = 0;
+        return;
+      }
+
+      const totalRating = this.productoDetalles.reviews.reduce((sum, review) => sum + review.rating, 0);
+      this.productoDetalles.ratingPromedio = (totalRating / this.productoDetalles.reviews.length).toFixed(2);
+    },
+    
     validarNumeroPositivo(campo) {
       if (this.productoForm[campo] < 0) {
         this.productoForm[campo] = 0;
