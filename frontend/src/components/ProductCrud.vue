@@ -5,7 +5,7 @@
       <h1>Quantum Inventory</h1>
     </nav>
     <button @click="mostrarFormularioCrear">Crear Producto</button>
-    
+
     <table id="productosTable" class="display">
       <thead>
         <tr>
@@ -112,19 +112,19 @@
 
           <div>
             <label for="informacionGarantia">Información de Garantía:</label>
-            <input type="text" v-model="productoForm.informacionGarantia" required
+            <input type="number" v-model="productoForm.informacionGarantia" required
               @input="validarNumeroPositivo('informacionGarantia')">
           </div>
 
           <div>
             <label for="informacionEnvio">Información de Envío:</label>
-            <input type="text" v-model="productoForm.informacionEnvio" required
+            <input type="number" v-model="productoForm.informacionEnvio" required
               @input="validarNumeroPositivo('informacionEnvio')">
           </div>
 
           <div>
             <label for="politicaDevolucion">Política de Retorno:</label>
-            <input type="text" v-model="productoForm.politicaDevolucion" required
+            <input type="number" v-model="productoForm.politicaDevolucion" required
               @input="validarNumeroPositivo('politicaDevolucion')">
           </div>
 
@@ -177,94 +177,113 @@
     <!-- Modal para mostrar detalles del producto -->
     <!-- Modal para mostrar detalles del producto -->
     <div v-if="mostrarDetalles" class="modal-overlay">
-      <div class="modal-content">
-        <span class="close" @click="cerrarDetalles">&times;</span>
-        <h2>Detalles del Producto</h2>
-        <p><strong>Id:</strong> {{ productoDetalles.id }}</p>
-        <p><strong>Título:</strong> {{ productoDetalles.titulo }}</p>
-        <p><strong>Descripción:</strong> {{ productoDetalles.descripcion }}</p>
-        <p><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
-        <p><strong>Precio:</strong> {{ productoDetalles.precio }}$</p>
-        <p><strong>Descuento:</strong> {{ productoDetalles.descuento }}%</p>
-        <p><strong>Rating Promedio:</strong> {{ productoDetalles.ratingPromedio }}</p>
-        <p><strong>Stock:</strong> {{ productoDetalles.stock }}</p>
-        <p><strong>Estado Disponibilidad:</strong> {{ productoDetalles.estadoDisponibilidad }}</p>
-        <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
-        <p><strong>SKU:</strong> {{ productoDetalles.sku }}</p>
-        <p><strong>Peso:</strong> {{ productoDetalles.peso }}</p>
-        <p><strong>Información de Garantía:</strong> {{ productoDetalles.informacionGarantia }} Dias</p>
-        <p><strong>Envío en:</strong> {{ productoDetalles.informacionEnvio }} Dias</p>
-        <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }} Dias</p>
-        <p><strong>Cantidad Mínima de Pedido:</strong> {{ productoDetalles.cantidadMinimaPedido }}</p>
-        <p><strong>Tags:</strong> {{ productoDetalles.tags.join(', ') }}</p>
-        <p><strong>Ancho:</strong> {{ productoDetalles.width }}</p>
-        <p><strong>Alto:</strong> {{ productoDetalles.height }}</p>
-        <p><strong>Profundidad:</strong> {{ productoDetalles.depth }}</p>
-        <div v-if="productoDetalles.imagen">
-          <p><strong>Imagen (URL):</strong></p>
+  <div class="modal-content">
+    <!-- Botón de cierre -->
+    <span class="close" @click="cerrarDetalles">&times;</span>
+    
+    <!-- Contenedor principal -->
+    <div class="product-visualizer">
+      <!-- Sección de imagen y QR -->
+      <div class="product-media">
+        <div v-if="productoDetalles.imagen" class="product-image">
           <img :src="productoDetalles.imagen" alt="Imagen del Producto" />
         </div>
-        <div v-if="productoDetalles.qrcode">
+        <div v-if="productoDetalles.qrcode" class="product-qrcode">
           <h3>QR Code</h3>
           <canvas id="detalleQRCode"></canvas>
         </div>
-        <div v-if="productoDetalles.barcode">
+        <div v-if="productoDetalles.barcode" class="product-barcode">
           <h3>Código de Barras</h3>
           <svg id="detalleBarcode"></svg>
+        </div>
       </div>
-      <!-- Botón para mostrar el formulario de reviews -->
-<button @click="mostrarFormularioReview = true">Crear Review</button>
 
-
-<!-- Formulario para crear una review -->
-<div v-if="mostrarFormularioReview" class="modal-overlay">
-  <div class="modal-content">
-    <span class="close" @click="mostrarFormularioReview = false">&times;</span>
-    <h3>Crear Review</h3>
-    <form @submit.prevent="crearReview">
-      <div>
-        <label for="nombre">Nombre:</label>
-        <input type="text" v-model="nuevaReview.reviewerName" required />
-      </div>
-      <div>
-        <label for="correo">Correo:</label>
-        <input type="email" v-model="nuevaReview.reviewerEmail" required />
-      </div>
-      <div>
-        <label for="comentario">Comentario:</label>
-        <textarea v-model="nuevaReview.comment" required></textarea>
-      </div>
-      <div>
-        <label for="calificacion">Calificación:</label>
-        <input type="number" v-model="nuevaReview.rating" min="1" max="5" required />
-      </div>
-      <button type="submit" >Guardar Review</button>    </form>
-  </div>
-</div>
-
-<!-- Lista de reviews -->
-<div>
-  <h3>Reviews</h3>
-  <div v-if="productoDetalles.reviews && productoDetalles.reviews.length">
-    <ul>
-      <li v-for="(review, index) in productoDetalles.reviews" :key="index">
-        <p><strong>Nombre: {{ review.reviewerName }}</strong> ({{ review.rating }}/5)</p>
-        <p><strong>Correo:</strong> {{ review.reviewerEmail}}</p>
-        <p><strong>Comentario:</strong> {{ review.comment }}</p>
-        <p><strong>Fecha:</strong> {{ review.date }}</p>
-      </li>
-    </ul>
-  </div>
-  <p v-else>No hay reviews para este producto.</p>
-</div>
-
-
+      <!-- Información del producto -->
+      <div class="product-details">
+        <h2>{{ productoDetalles.titulo }}</h2>
+        <p class="product-category"><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
+        <p class="product-price">
+          <strong>Precio:</strong> {{ productoDetalles.precio }}$
+          <span v-if="productoDetalles.descuento" class="product-discount">-{{ productoDetalles.descuento }}%</span>
+        </p>
+        <p class="product-rating"><strong>Rating Promedio:</strong> {{ productoDetalles.ratingPromedio }}</p>
+        <p class="product-stock">
+          <strong>Disponibilidad:</strong> 
+          <span :class="{'in-stock': productoDetalles.stock > 0, 'out-of-stock': productoDetalles.stock === 0}">
+            {{ productoDetalles.estadoDisponibilidad }}
+          </span>
+        </p>
+        <p class="product-description"><strong>Descripción:</strong> {{ productoDetalles.descripcion }}</p>
+        <div class="product-meta">
+          <p><strong>Marca:</strong> {{ productoDetalles.marca }}</p>
+          <p><strong>SKU:</strong> {{ productoDetalles.sku }}</p>
+          <p><strong>Peso:</strong> {{ productoDetalles.peso }}</p>
+          <p><strong>Dimensiones:</strong> {{ productoDetalles.width }} x {{ productoDetalles.height }} x {{ productoDetalles.depth }}</p>
+        </div>
+        <div class="product-policies">
+          <p><strong>Garantía:</strong> {{ productoDetalles.informacionGarantia }} días</p>
+          <p><strong>Envío en:</strong> {{ productoDetalles.informacionEnvio }} días</p>
+          <p><strong>Política de Retorno:</strong> {{ productoDetalles.politicaDevolucion }} días</p>
+        </div>
+        <div class="product-tags" v-if="productoDetalles.tags && productoDetalles.tags.length">
+          <strong>Tags:</strong> <span>{{ productoDetalles.tags.join(', ') }}</span>
+        </div>
       </div>
     </div>
 
+    <!-- Botón para crear review -->
+    <div class="product-actions">
+      <button class="btn-primary" @click="mostrarFormularioReview = true">Crear Review</button>
+    </div>
 
-   
+    <!-- Formulario de review -->
+    <div v-if="mostrarFormularioReview" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close" @click="mostrarFormularioReview = false">&times;</span>
+        <h3>Crear Review</h3>
+        <form @submit.prevent="crearReview" class="review-form">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" v-model="nuevaReview.reviewerName" required />
+          </div>
+          <div class="form-group">
+            <label for="correo">Correo:</label>
+            <input type="email" v-model="nuevaReview.reviewerEmail" required />
+          </div>
+          <div class="form-group">
+            <label for="comentario">Comentario:</label>
+            <textarea v-model="nuevaReview.comment" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="calificacion">Calificación (1-5):</label>
+            <input type="number" v-model="nuevaReview.rating" min="1" max="5" required />
+          </div>
+          <button type="submit" class="btn-primary">Guardar Review</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Lista de reviews -->
+    <div class="product-reviews">
+      <h3>Reviews</h3>
+      <div v-if="productoDetalles.reviews && productoDetalles.reviews.length">
+        <ul>
+          <li v-for="(review, index) in productoDetalles.reviews" :key="index" class="review-item">
+            <p><strong>{{ review.reviewerName }}</strong> ({{ review.rating }}/5)</p>
+            <p>{{ review.comment }}</p>
+            <small>{{ review.date }}</small>
+          </li>
+        </ul>
+      </div>
+      <p v-else>No hay reviews para este producto.</p>
+    </div>
   </div>
+</div>
+  </div>
+
+
+
+
 </template>
 
 <script>
@@ -284,15 +303,15 @@ export default {
       mostrarDetalles: false,
       editando: false,
       mostrarFormularioReview: false, // Controla la visibilidad del formulario de reviews
-       nuevaReview: {
+      nuevaReview: {
         rating: null,
         comment: '',
         date: '',
         reviewerName: '',
         reviewerEmail: ''
-     
-      
-    },
+
+
+      },
       productoForm: {
         id: null,
         titulo: '',
@@ -320,10 +339,10 @@ export default {
         estadoDisponibilidad: '',
         imagen: '',
         ratingPromedio: 0
-        
+
       },
       productoDetalles: {
-       
+
       },
       nuevaCategoria: '',
       nuevoTag: '',
@@ -343,8 +362,8 @@ export default {
       axios.get('http://localhost:8082/productos')
         .then(response => {
           if ($.fn.dataTable.isDataTable('#productosTable')) {
-          $('#productosTable').DataTable().destroy(); // Destruye la instancia existente de DataTable
-        }
+            $('#productosTable').DataTable().destroy(); // Destruye la instancia existente de DataTable
+          }
 
           this.productos = response.data;
           //definimos el datatable importante para que funcione
@@ -356,7 +375,7 @@ export default {
               info: true,
               lengthChange: true,
               pageLength: 10,
-           
+
             });
           });
         })
@@ -514,50 +533,50 @@ export default {
       this.calcularRatingPromedio();
     },
 
-    
+
 
     obtenerProductoDetalles(id) {
-    axios.get(`/productos/${id}`)
-      .then(response => {
-        this.productoDetalles = response.data;
-        this.productoDetalles.reviews = response.data.reviews || [];
-        this.calcularRatingPromedio();
-      })
-      .catch(error => {
-        console.error("Hubo un error al obtener los detalles del producto:", error);
-      });
-  },
+      axios.get(`/productos/${id}`)
+        .then(response => {
+          this.productoDetalles = response.data;
+          this.productoDetalles.reviews = response.data.reviews || [];
+          this.calcularRatingPromedio();
+        })
+        .catch(error => {
+          console.error("Hubo un error al obtener los detalles del producto:", error);
+        });
+    },
 
-  crearReview() {
-  if (!this.productoDetalles.reviews) {
-    this.productoDetalles.reviews = [];
-  }
+    crearReview() {
+      if (!this.productoDetalles.reviews) {
+        this.productoDetalles.reviews = [];
+      }
 
-  const nuevaReview = {
-    reviewerName: this.nuevaReview.reviewerName,
-    reviewerEmail: this.nuevaReview.reviewerEmail,
-    comment: this.nuevaReview.comment,
-    rating: this.nuevaReview.rating,
-    date: new Date().toISOString()// Cambiado a formato ISO
-  };
-  console.log("Nueva review:", nuevaReview);
+      const nuevaReview = {
+        reviewerName: this.nuevaReview.reviewerName,
+        reviewerEmail: this.nuevaReview.reviewerEmail,
+        comment: this.nuevaReview.comment,
+        rating: this.nuevaReview.rating,
+        date: new Date().toISOString()// Cambiado a formato ISO
+      };
+      console.log("Nueva review:", nuevaReview);
 
-  // Enviar la nueva review al backend
-  axios.post(`http://localhost:8082/productos/${this.productoDetalles.id}/reviews`, nuevaReview)
-    .then(response => {
-      // Agregar la nueva review al producto
-      this.productoDetalles.reviews.push(response.data);
+      // Enviar la nueva review al backend
+      axios.post(`http://localhost:8082/productos/${this.productoDetalles.id}/reviews`, nuevaReview)
+        .then(response => {
+          // Agregar la nueva review al producto
+          this.productoDetalles.reviews.push(response.data);
 
-      // Limpiar el formulario
-      this.nuevaReview = { reviewerName: '', reviewerEmail: '', comment: '', rating: 0 };
-      this.mostrarFormularioReview = false;
-    })
-    .catch(error => {
-      console.error("Hubo un error al crear la review:", error);
-    });
-},
+          // Limpiar el formulario
+          this.nuevaReview = { reviewerName: '', reviewerEmail: '', comment: '', rating: 0 };
+          this.mostrarFormularioReview = false;
+        })
+        .catch(error => {
+          console.error("Hubo un error al crear la review:", error);
+        });
+    },
 
-calcularRatingPromedio() {
+    calcularRatingPromedio() {
       if (this.productoDetalles.reviews.length === 0) {
         this.productoDetalles.ratingPromedio = 0;
         return;
@@ -566,7 +585,7 @@ calcularRatingPromedio() {
       const totalRating = this.productoDetalles.reviews.reduce((sum, review) => sum + review.rating, 0);
       this.productoDetalles.ratingPromedio = (totalRating / this.productoDetalles.reviews.length).toFixed(2);
     },
-    
+
     validarNumeroPositivo(campo) {
       if (this.productoForm[campo] < 0) {
         this.productoForm[campo] = 0;
@@ -608,8 +627,8 @@ h1 {
   color: white;
 }
 
-.modal-content img{
-  width:50%;
+.modal-content img {
+  width: 50%;
 }
 
 .btn-eliminar {
@@ -715,5 +734,137 @@ h1 {
     opacity: 1;
     transform: scale(1);
   }
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.product-visualizer {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.product-media {
+  flex: 1;
+  max-width: 300px;
+}
+
+.product-image img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.product-details {
+  flex: 2;
+}
+
+.product-details h2 {
+  margin-bottom: 10px;
+  font-size: 1.8em;
+}
+
+.product-price {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+.product-discount {
+  color: red;
+  margin-left: 10px;
+}
+
+.product-stock .in-stock {
+  color: green;
+}
+
+.product-stock .out-of-stock {
+  color: red;
+}
+
+.product-meta,
+.product-policies {
+  margin-top: 10px;
+}
+
+.product-tags {
+  margin-top: 10px;
+}
+
+.product-actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.review-form .form-group {
+  margin: 2%;
+  display: flexbox
+}
+
+.review-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.review-form input,
+.review-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.product-reviews ul {
+  list-style: none;
+  padding: 0;
+  width: 90%;
+}
+.product-reviews li {
+  padding-left: 1%;
+  width: 90%;
+}
+
+.review-item {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
 }
 </style>
