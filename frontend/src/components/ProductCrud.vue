@@ -201,11 +201,12 @@
       <!-- Información del producto -->
       <div class="product-details">
         <h2>{{ productoDetalles.titulo }}</h2>
+        <p><strong>Id:</strong> {{ productoDetalles.id }}</p>
         <p class="product-category"><strong>Categoría:</strong> {{ productoDetalles.categoria }}</p>
         <p class="product-price">
           <strong>Precio:</strong> {{ productoDetalles.precio }}$
-          <span v-if="productoDetalles.descuento" class="product-discount">-{{ productoDetalles.descuento }}%</span>
         </p>
+        <p><strong>Descuento:</strong> {{ productoDetalles.descuento }}%</p>
         <p class="product-rating"><strong>Rating Promedio:</strong> {{ productoDetalles.ratingPromedio }}</p>
         <p class="product-stock">
           <strong>Disponibilidad:</strong> 
@@ -856,10 +857,15 @@ h1 {
 .product-reviews ul {
   list-style: none;
   padding: 0;
+  width: 50%;
+}
+.product-reviews ul p{
+  list-style: none;
+  padding: 0;
   width: 90%;
 }
 .product-reviews li {
-  padding-left: 1%;
+  padding-left: 2%;
   width: 90%;
 }
 
