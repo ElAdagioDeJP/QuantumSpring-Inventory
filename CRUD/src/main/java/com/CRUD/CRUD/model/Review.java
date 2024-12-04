@@ -16,7 +16,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer rating;
+    private Double rating;
     private String comment;
     private LocalDateTime date;
     private String reviewerName;
@@ -31,11 +31,11 @@ public class Review {
         this.id = id;
     }
 
-    public Integer getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 

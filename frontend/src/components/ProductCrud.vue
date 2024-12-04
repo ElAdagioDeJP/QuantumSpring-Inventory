@@ -257,7 +257,7 @@
           </div>
           <div class="form-group">
             <label for="calificacion">Calificación (1-5):</label>
-            <input type="number" v-model="nuevaReview.rating" min="1" max="5" required />
+            <input type="number" v-model="nuevaReview.rating" min="1" max="5"  step="0.1" required />
           </div>
           <button type="submit" class="btn-primary">Guardar Review</button>
         </form>
@@ -273,6 +273,8 @@
             <p><strong>{{ review.reviewerName }}</strong> ({{ review.rating }}/5)</p>
             <p>{{ review.comment }}</p>
             <small>{{ review.date }}</small>
+            <button @click="editarReview(index)">Editar</button>
+            <button @click="eliminarReview(index)">Eliminar</button>
           </li>
         </ul>
       </div>
@@ -549,31 +551,68 @@ export default {
     },
 
     crearReview() {
-      if (!this.productoDetalles.reviews) {
-        this.productoDetalles.reviews = [];
+      if (this.reviewEditando) {
+        this.actualizarReview();
+      } else {
+        if (!this.productoDetalles.reviews) {
+          this.productoDetalles.reviews = [];
+        }
+
+        const nuevaReview = {
+          reviewerName: this.nuevaReview.reviewerName,
+          reviewerEmail: this.nuevaReview.reviewerEmail,
+          comment: this.nuevaReview.comment,
+          rating: this.nuevaReview.rating,
+          date: new Date().toISOString() // Cambiado a formato ISO
+        };
+        console.log("Nueva review:", nuevaReview);
+
+        // Enviar la nueva review al backend
+        axios.post(`http://localhost:8082/productos/${this.productoDetalles.id}/reviews`, nuevaReview)
+          .then(response => {
+            // Agregar la nueva review al producto
+            this.productoDetalles.reviews.push(response.data);
+            
+            this.calcularRatingPromedio();
+
+            // Limpiar el formulario
+            this.nuevaReview = { reviewerName: '', reviewerEmail: '', comment: '', rating: 0 };
+            this.mostrarFormularioReview = false;
+          })
+          .catch(error => {
+            console.error("Hubo un error al crear la review:", error);
+          });
       }
-
-      const nuevaReview = {
-        reviewerName: this.nuevaReview.reviewerName,
-        reviewerEmail: this.nuevaReview.reviewerEmail,
-        comment: this.nuevaReview.comment,
-        rating: this.nuevaReview.rating,
-        date: new Date().toISOString()// Cambiado a formato ISO
-      };
-      console.log("Nueva review:", nuevaReview);
-
-      // Enviar la nueva review al backend
-      axios.post(`http://localhost:8082/productos/${this.productoDetalles.id}/reviews`, nuevaReview)
-        .then(response => {
-          // Agregar la nueva review al producto
-          this.productoDetalles.reviews.push(response.data);
-
-          // Limpiar el formulario
-          this.nuevaReview = { reviewerName: '', reviewerEmail: '', comment: '', rating: 0 };
-          this.mostrarFormularioReview = false;
+    },
+    eliminarReview(index) {
+      const reviewId = this.productoDetalles.reviews[index].id;
+      axios.delete(`http://localhost:8082/productos/${this.productoDetalles.id}/reviews/${reviewId}`)
+        .then(() => {
+          this.productoDetalles.reviews.splice(index, 1);
+          this.calcularRatingPromedio();
         })
         .catch(error => {
-          console.error("Hubo un error al crear la review:", error);
+          console.error("Hubo un error al eliminar la review:", error);
+        });
+    },
+    editarReview(index) {
+      this.reviewEditando = { ...this.productoDetalles.reviews[index] };
+      this.nuevaReview = { ...this.reviewEditando }; // Cargar los datos en el formulario
+      this.mostrarFormularioReview = true;
+    },
+    actualizarReview() {
+      const reviewId = this.reviewEditando.id;
+      axios.put(`http://localhost:8082/productos/${this.productoDetalles.id}/reviews/${reviewId}`, this.nuevaReview)
+        .then(response => {
+          const index = this.productoDetalles.reviews.findIndex(review => review.id === reviewId);
+          this.productoDetalles.reviews.splice(index, 1, response.data);
+          this.reviewEditando = null;
+          this.nuevaReview = { reviewerName: '', reviewerEmail: '', comment: '', rating: 0 }; // Limpiar el formulario
+          this.mostrarFormularioReview = false;
+          this.calcularRatingPromedio();
+        })
+        .catch(error => {
+          console.error("Hubo un error al actualizar la review:", error);
         });
     },
 
